@@ -1,1 +1,68 @@
-# langchain-tutorial
+# 🧠LangChain-Tutorial (JavaScript)
+
+Hi! I'm **Yatharth**, and this is my personal LangChain learning repo.  
+I'm exploring how to use **LangChain with JavaScript** to build AI-powered applications using large language models (LLMs) like **OpenAI**, **Groq**, and others.
+
+---
+
+## 💡What is LangChain?
+
+**LangChain** is a framework that helps developers build apps powered by LLMs.  
+It connects language models with external tools like APIs, databases, files, and more.
+
+With LangChain, you can create things like:
+
+- Chatbots 💬  
+- AI agents that call APIs 🔗  
+- Document Q&A tools 📄  
+- Search + reasoning apps 🔍🧠
+
+---
+
+## 🛠️What I'm Doing Here
+
+I'm using **Node.js** and **JavaScript** with LangChain to:
+
+- Set up my first chatbot using the `ChatOpenAI/ChatGroq` class.
+- Learn how to connect to  Groq and OpenAI  APIs.
+- Test LLM responses using `.invoke()` calls.
+- Handle `.env` files securely for API keys.
+- Understand error handling for quota limits and model issues.
+
+---
+
+## 📂Files in This Project
+
+- `llm.js` – Test file to send prompts to an LLM.
+- `.env` – Stores API keys (not uploaded).
+- `package.json` – Dependencies.
+- `README.md` – You're reading it 😊
+
+---
+
+## ✅Example Output
+
+```bash
+> node llm.js
+llm.js loaded 2025-06-01T11:27:39.413Z
+Response from LLM: ************************
+```
+
+## 🌐Models I'm Trying
+
+```
+OpenAI: gpt-3.5-turbo (but needs paid quota🥹)
+Groq: Fast models like llama3-8b (free & good alternative)
+```
+
+## 🚧Still Learning...
+
+I'm figuring out:
+- How to chain prompts together.
+- How to use memory and tools with agents.
+- How to switch models easily (OpenAI, Groq, Cohere, etc).
+
+## 🤝Let's Connect
+
+If you're also learning LangChain or building AI stuff, feel free to connect!
+Made with ❤️ by Yatharth
