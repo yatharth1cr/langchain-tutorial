@@ -15,7 +15,7 @@ With LangChain, you can create things like:
 - Chatbots 💬
 - AI agents that call APIs 🔗
 - Document Q&A tools 📄
-- Search + reasoning apps 🔍🧠
+- Search + reasoning apps 🔍🧠 
 
 ---
 
