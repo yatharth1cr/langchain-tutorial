@@ -1,51 +1,53 @@
-import { ChatGroq } from "@langchain/groq";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { Document } from "@langchain/core/documents";
-import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
-
 import * as dotenv from "dotenv";
 dotenv.config();
 
-const model = new ChatGroq({
-  model: "llama3-8b-8192",
-  apiKey: process.env.GROQ_API_KEY,
-  temperature: 0.7,
-});
+import { AzureChatOpenAI } from "@langchain/openai";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
+import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
-// Create a prompt
+// Define your LLM
+const llm = new AzureChatOpenAI({
+  azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+  azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+  azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_DEPLOYMENT,
+  azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
+});
+// Prompt using context
 const prompt = ChatPromptTemplate.fromTemplate(
-  `Answer the question:  
-  Context: {context}
+  `Answer the users Question.
+  Context:{context}
   Question: {question}`
 );
 
-const document1 = new Document({
-  pageContent:
-    "LCEL (LangChain Expression Language) provides a concise reference guide covering its most essential primitives. For advanced use cases, consult the LCEL how-to guides and full API documentation.",
-});
-
-const document2 = new Document({
-  pageContent:
-    "A passphrase is a secure sequence of words or characters used to authenticate a user or encrypt sensitive data. It should be kept private and not shared with unauthorized individuals.",
-});
-
-const document3 = new Document({
-  pageContent:
-    "If someone inquires about topics unrelated to LCEL, kindly respond with: 'I'm not able to answer that question at the moment.'",
-});
-
-// create chain
-// const chain = prompt.pipe(model);
+// Create chain
+// const chain = prompt.pipe(llm);
 const chain = await createStuffDocumentsChain({
-  llm: model,
+  llm,
   prompt,
 });
 
-const response = await chain.invoke({
-  //   question: "What is LCEL?",
-  //   question: "What is passphrase?",
-  question: "what is the capital of india?",
-  context: [document1, document2, document3],
+// Load page and extract text
+const loader = new CheerioWebBaseLoader(
+  "https://js.langchain.com/docs/how_to/lcel_cheatsheet/"
+);
+const docs = await loader.load();
+console.log("Context extracted:", docs[0].pageContent.length);
+
+const splitter = new RecursiveCharacterTextSplitter({
+  chunkSize: 300,
+  chunkOverlap: 30,
 });
 
-console.log("Response from LLM:", response);
+const splitDocs = await splitter.splitDocuments(docs);
+console.log("Split documents:", splitDocs.length);
+
+// Call LLM
+const response = await chain.invoke({
+  question: "What is LangChain?",
+  context: docs,
+});
+
+// Show result
+console.log("\nResponse from LLM:\n", response);
