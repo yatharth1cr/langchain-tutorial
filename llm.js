@@ -1,19 +1,17 @@
-console.log("llm.js loaded", new Date());
-
 import * as dotenv from "dotenv";
-import { ChatGroq } from "@langchain/groq";
-
 dotenv.config();
+import { AzureChatOpenAI } from "@langchain/openai";
 
-// created model instance with Groq
-const model = new ChatGroq({
-  apiKey: process.env.GROQ_API_KEY,
-  model: "llama3-8b-8192",
+const model = new AzureChatOpenAI({
+  azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY,
+  azureOpenAIApiInstanceName: process.env.AZURE_OPENAI_API_INSTANCE_NAME,
+  azureOpenAIApiDeploymentName: process.env.AZURE_OPENAI_DEPLOYMENT,
+  azureOpenAIApiVersion: process.env.OPENAI_API_VERSION,
 });
 
 // call the model directly with a prompt
 model
-  .invoke("write a poem about Developer switching to langchain")
+  .invoke("write a poem about the sea")
   .then((response) => {
     console.log("Response from LLM:", response.text);
   })
